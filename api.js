@@ -7,7 +7,9 @@ const apiSecret = process.env.SECRET_KEY;
 const apiUrl = process.env.API_URL;
 
 async function privateCall(path, data = {}, method = 'GET'){
-    const timestamp = Date.now();
+    const timestamp = await timeOfServer()//Date.now();
+    console.log('aidsiasdadasd')
+    console.log(timestamp)
     const signature = crypto.createHmac('sha256', apiSecret)
                     .update(`${querystring.stringify({...data, timestamp})}`)
                     .digest('hex');
@@ -30,6 +32,19 @@ async function privateCall(path, data = {}, method = 'GET'){
     }
 }
 
+async function timeOfServer(){
+    try{
+        const result = await axios({
+            method,
+            url: `${apiUrl}/v3/time`,
+            headers: { 'X-MBX-APIKEY': apiKey }
+        })
+        console.log(result)
+        return result.data
+    }catch(err){
+        console.log(err)
+    }
+}
 
 async function accountInfo(){
     return privateCall('/v3/account');
@@ -77,4 +92,4 @@ async function exchangeInfo(){
     return publicCall('/v3/exchangeInfo')
 }
 
-module.exports = { time, depth, exchangeInfo, accountInfo, newOrder }
+module.exports = { time, depth, exchangeInfo, accountInfo, newOrder, timeOfServer }

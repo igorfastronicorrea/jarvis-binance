@@ -25,8 +25,15 @@ setInterval(async () => {
     //**************** */
     console.log(`Minha carteira...`)
     console.log(await api.accountInfo())
-    await actions.buy(sell);
-    
+
+
+    //await actions.buy(sell);
+
+
+    //VENDER
+    //const coins = account.balances.filter(b=> symbol.indexOf(b.asset) !== -1);
+    //const quantityBTC = parseFloat(coins.find(c => c.asset === 'BTC').free)
+    //await actions.sell(buy, quantityBTC)
 
     //const buyOrder = await api.newOrder(symbol, 0.0018);
 

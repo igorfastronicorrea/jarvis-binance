@@ -19,6 +19,18 @@ async function buy(lowestSell){
     return true
 }
 
+async function sell(highestBuy, quantityBTC){
+    /*console.log('Posicionando venda futura...');
+    const price =  parseFloat(highestBuy).toFixed(8);
+    console.log(`Vendendo por ${price} (${profitability})`);
+    const sellOrder = await api.newOrder(symbol, quantityBTC, price, 'SELL', 'LIMIT');
+    console.log(`orderId: ${sellOrder.orderId}`);
+    console.log(`status: ${sellOrder.status}`);*/
+
+    //console.log(`Vender por ${highestBuy}`)
+    //console.log(`Quantidade de BTC ${quantityBTC}`)
+    
+}
 
 async function myWallet(){
 
@@ -33,4 +45,4 @@ async function myWallet(){
     return myMoney
 }
 
-module.exports = { buy, myWallet }
+module.exports = { buy, myWallet, sell }
