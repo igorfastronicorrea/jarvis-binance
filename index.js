@@ -45,7 +45,7 @@ setInterval(async () => {
         console.log('****** TRAVADO EM VENDA  *********')
     }else{
         console.log('****** LIVRE PARA COMPRA  *********')
-        if(sell < (global.lastPrice - (global.lastPrice * 0.003)) || global.lastPrice === undefined ){
+        if(sell < (global.lastPrice - (global.lastPrice * 0.005)) || global.lastPrice === undefined ){
             await actions.buy(sell);
         }else{
             console.log('****** NÃO É HORA DE COMPRAR  *********') 
