@@ -5,6 +5,11 @@ const profitability = parseFloat(process.env.PROFITABILITY)
 const coin = process.env.COIN
 const goodBuy = process.env.GOODBUY
 
+const app = require('./app');
+const http = require('http');
+
+app.listen(process.env.PORT || 3333);
+
 setInterval(async () => {
     
     let buy = 0, sell = 0;
