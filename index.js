@@ -27,15 +27,26 @@ setInterval(async () => {
     console.log(await api.accountInfo())
 
 
-    //await actions.buy(sell);
+    console.log('VERIFICANDO SE TENHO DINHEIRO');    
+    const account = await api.accountInfo();
+    const coins = account.balances.filter(b=> symbol.indexOf(b.asset) !== -1);
+    const walletCoin = parseFloat(coins.find(c => c.asset === coin).free)
+    const btcInLocked = parseFloat(coins.find(c => c.asset === 'BTC').locked).toFixed(5)
+        
+    console.log(`GLOBAL = ${global.lastPrice}`)
+    console.log(`VALOR LOCKET = ${btcInLocked}`)
 
-
-    //VENDER
-    //const coins = account.balances.filter(b=> symbol.indexOf(b.asset) !== -1);
-    //const quantityBTC = parseFloat(coins.find(c => c.asset === 'BTC').free)
-    //await actions.sell(buy, quantityBTC)
-
-    //const buyOrder = await api.newOrder(symbol, 0.0018);
+    if(btcInLocked > 0){
+        console.log('****** TRAVADO EM VENDA  *********')
+    }else{
+        console.log('****** LIVRE PARA COMPRA  *********')
+        if(sell < (global.lastPrice - (global.lastPrice * 0.003)) || global.lastPrice === undefined ){
+            await actions.buy(sell);
+        }else{
+            console.log('****** NÃO É HORA DE COMPRAR  *********') 
+        }    
+            
+    }
 
     
     //console.log(`Nova carteiraaa...`)

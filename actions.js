@@ -1,6 +1,7 @@
 const api = require('./api');
 const symbol = process.env.SYMBOL;
 const coin = process.env.COIN
+const profitability = parseFloat(process.env.PROFITABILITY)
 
 async function buy(lowestSell){
 
@@ -8,7 +9,7 @@ async function buy(lowestSell){
     //minha carteira dividia pelo valor do bitcoin
     var myWalletUSD = await myWallet()
     console.log(`VALOR EM DOLARES = ${myWalletUSD}`)
-    var quantity = parseFloat((myWalletUSD / 4) / lowestSell).toFixed(5)
+    var quantity = parseFloat((myWalletUSD - (myWalletUSD * 0.05)) / lowestSell).toFixed(5)
     
     console.log(`Quantidade = ${quantity}`)
     const buyOrder = await api.newOrder(symbol, quantity);
@@ -16,21 +17,35 @@ async function buy(lowestSell){
     console.log("MINHA CARTEIRA ___")
     console.log(await api.accountInfo())
     
+    await sell(lowestSell)
     return true
 }
 
-async function sell(highestBuy, quantityBTC){
-    /*console.log('Posicionando venda futura...');
-    const price =  parseFloat(highestBuy).toFixed(8);
-    console.log(`Vendendo por ${price} (${profitability})`);
-    const sellOrder = await api.newOrder(symbol, quantityBTC, price, 'SELL', 'LIMIT');
-    console.log(`orderId: ${sellOrder.orderId}`);
-    console.log(`status: ${sellOrder.status}`);*/
+async function sell(lowestSell){
+    console.log('Posicionando venda futura...');
+    const price =  parseFloat(lowestSell + (lowestSell * profitability)).toFixed(2);
 
-    //console.log(`Vender por ${highestBuy}`)
-    //console.log(`Quantidade de BTC ${quantityBTC}`)
+    const account = await api.accountInfo();
+    const coins = account.balances.filter(b=> symbol.indexOf(b.asset) !== -1);
+    var quantityBTC = parseFloat(coins.find(c => c.asset === 'BTC').free)
     
+
+    quantityBTC = quantityBTC.toString(); //If it's not already a String
+    quantityBTC = quantityBTC.slice(0, (quantityBTC.indexOf("."))+6); //With 3 exposing the hundredths place
+    
+    console.log("*************")
+    console.log(`Comprou por = ${lowestSell}`)
+    console.log(`Vendendo por = ${price}`)
+    global.lastPrice = price;
+    console.log(`Quantidade btc = ${quantityBTC}`)
+    console.log("*************")
+
+    const sellOrder = await api.newOrder(symbol, quantityBTC
+        , price, 'SELL', 'LIMIT');
+    console.log(`orderId: ${sellOrder.orderId}`);
+    console.log(`status: ${sellOrder.status}`);
 }
+
 
 async function myWallet(){
 
