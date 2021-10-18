@@ -43,9 +43,11 @@ setInterval(async () => {
 
     if(btcInLocked > 0){
         console.log('****** TRAVADO EM VENDA  *********')
+        console.log(`VALOR IDEAL PARA COMPRA: ${parseFloat((global.lastPrice - (global.lastPrice * 0.005))).toFixed(5)}`)
     }else{
         console.log('****** LIVRE PARA COMPRA  *********')
-        if(sell < (global.lastPrice - (global.lastPrice * 0.005)) || global.lastPrice === undefined ){
+        console.log(`VALOR IDEAL PARA COMPRA: ${(global.lastPrice - (global.lastPrice * 0.005))}`)
+        if(sell < (parseFloat((global.lastPrice - (global.lastPrice * 0.005))).toFixed(5)) || global.lastPrice === undefined ){
             await actions.buy(sell);
         }else{
             console.log('****** NÃO É HORA DE COMPRAR  *********') 
